@@ -16,7 +16,6 @@ interface Team {
   id: number;
   name: string;
   logo_url: string;
-  conference: string;
   games_played: number;
   wins: number;
   losses: number;
@@ -92,14 +91,14 @@ function Index() {
 
   const fetchTeams = async () => {
     const mockTeams: Team[] = [
-      { id: 1, name: 'Салават Юлаев', logo_url: '', conference: 'Восточная', games_played: 15, wins: 10, losses: 3, overtime_losses: 2, goals_for: 45, goals_against: 30, points: 32 },
-      { id: 2, name: 'Металлург Мг', logo_url: '', conference: 'Восточная', games_played: 15, wins: 9, losses: 4, overtime_losses: 2, goals_for: 42, goals_against: 33, points: 29 },
-      { id: 3, name: 'Авангард', logo_url: '', conference: 'Восточная', games_played: 15, wins: 8, losses: 5, overtime_losses: 2, goals_for: 40, goals_against: 35, points: 26 },
-      { id: 4, name: 'Трактор', logo_url: '', conference: 'Восточная', games_played: 15, wins: 7, losses: 6, overtime_losses: 2, goals_for: 38, goals_against: 37, points: 23 },
-      { id: 5, name: 'ЦСКА', logo_url: '', conference: 'Западная', games_played: 15, wins: 11, losses: 2, overtime_losses: 2, goals_for: 50, goals_against: 28, points: 35 },
-      { id: 6, name: 'СКА', logo_url: '', conference: 'Западная', games_played: 15, wins: 10, losses: 3, overtime_losses: 2, goals_for: 47, goals_against: 30, points: 32 },
-      { id: 7, name: 'Динамо М', logo_url: '', conference: 'Западная', games_played: 15, wins: 9, losses: 4, overtime_losses: 2, goals_for: 44, goals_against: 32, points: 29 },
-      { id: 8, name: 'Спартак', logo_url: '', conference: 'Западная', games_played: 15, wins: 6, losses: 7, overtime_losses: 2, goals_for: 35, goals_against: 40, points: 20 },
+      { id: 1, name: 'Салават Юлаев', logo_url: '', games_played: 15, wins: 10, losses: 3, overtime_losses: 2, goals_for: 45, goals_against: 30, points: 32 },
+      { id: 2, name: 'Металлург Мг', logo_url: '', games_played: 15, wins: 9, losses: 4, overtime_losses: 2, goals_for: 42, goals_against: 33, points: 29 },
+      { id: 3, name: 'Авангард', logo_url: '', games_played: 15, wins: 8, losses: 5, overtime_losses: 2, goals_for: 40, goals_against: 35, points: 26 },
+      { id: 4, name: 'Трактор', logo_url: '', games_played: 15, wins: 7, losses: 6, overtime_losses: 2, goals_for: 38, goals_against: 37, points: 23 },
+      { id: 5, name: 'ЦСКА', logo_url: '', games_played: 15, wins: 11, losses: 2, overtime_losses: 2, goals_for: 50, goals_against: 28, points: 35 },
+      { id: 6, name: 'СКА', logo_url: '', games_played: 15, wins: 10, losses: 3, overtime_losses: 2, goals_for: 47, goals_against: 30, points: 32 },
+      { id: 7, name: 'Динамо М', logo_url: '', games_played: 15, wins: 9, losses: 4, overtime_losses: 2, goals_for: 44, goals_against: 32, points: 29 },
+      { id: 8, name: 'Спартак', logo_url: '', games_played: 15, wins: 6, losses: 7, overtime_losses: 2, goals_for: 35, goals_against: 40, points: 20 },
     ];
     setTeams(mockTeams);
   };
@@ -125,15 +124,15 @@ function Index() {
 
   const fetchNews = async () => {
     const mockNews: News[] = [
-      { id: 1, title: 'Старт нового сезона VPHL!', content: 'Виртуальная Хоккейная Лига объявляет о старте сезона 2025/2026. В этом году нас ждут захватывающие матчи между лучшими командами!', image_url: 'https://cdn.poehali.dev/files/4938ef37-c2bf-4454-a473-3f5ff414e071.png', published_at: new Date().toISOString(), author: 'Администрация лиги' },
-      { id: 2, title: 'ЦСКА лидирует в Западной конференции', content: 'После 15 игр ЦСКА уверенно держит первое место в Западной конференции с 35 очками.', published_at: new Date().toISOString(), author: 'Администрация лиги' },
+      { id: 1, title: 'Старт нового сезона VHL!', content: 'Виртуальная Хоккейная Лига объявляет о старте сезона 2025/2026. В этом году нас ждут захватывающие матчи между лучшими командами!', image_url: 'https://cdn.poehali.dev/files/4938ef37-c2bf-4454-a473-3f5ff414e071.png', published_at: new Date().toISOString(), author: 'Администрация лиги' },
+      { id: 2, title: 'ЦСКА лидирует в турнирной таблице', content: 'После 15 игр ЦСКА уверенно держит первое место с 35 очками.', published_at: new Date().toISOString(), author: 'Администрация лиги' },
     ];
     setNews(mockNews);
   };
 
   const fetchRegulations = async () => {
     const mockRegulations: Regulation[] = [
-      { id: 1, title: 'Общие положения', content: 'Виртуальная Хоккейная Лига (VPHL) - это онлайн-турнир по виртуальному хоккею. Все участники обязаны соблюдать правила честной игры.', section_order: 1 },
+      { id: 1, title: 'Общие положения', content: 'Виртуальная Хоккейная Лига (VHL) - это онлайн-турнир по виртуальному хоккею. Все участники обязаны соблюдать правила честной игры.', section_order: 1 },
       { id: 2, title: 'Система начисления очков', content: 'Победа в основное время: 3 очка. Победа в овертайме/буллитах: 2 очка. Поражение в овертайме/буллитах: 1 очко. Поражение в основное время: 0 очков.', section_order: 2 },
       { id: 3, title: 'Формат турнира', content: 'Регулярный сезон состоит из 48 игр для каждой команды. По итогам регулярного сезона 8 лучших команд выходят в плей-офф.', section_order: 3 },
     ];
@@ -168,7 +167,7 @@ function Index() {
   const getEmptyItem = (type: string) => {
     switch (type) {
       case 'team':
-        return { id: Date.now(), name: '', logo_url: '', conference: 'Восточная', games_played: 0, wins: 0, losses: 0, overtime_losses: 0, goals_for: 0, goals_against: 0, points: 0 };
+        return { id: Date.now(), name: '', logo_url: '', games_played: 0, wins: 0, losses: 0, overtime_losses: 0, goals_for: 0, goals_against: 0, points: 0 };
       case 'match':
         return { id: Date.now(), home_team_id: teams[0]?.id || 1, away_team_id: teams[1]?.id || 2, match_date: new Date().toISOString().slice(0, 16), home_score: 0, away_score: 0, status: 'scheduled', season: '2025/2026' };
       case 'player':
@@ -256,8 +255,7 @@ function Index() {
     }
   };
 
-  const eastTeams = teams.filter(t => t.conference === 'Восточная').sort((a, b) => b.points - a.points);
-  const westTeams = teams.filter(t => t.conference === 'Западная').sort((a, b) => b.points - a.points);
+  const sortedTeams = teams.sort((a, b) => b.points - a.points);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -269,7 +267,7 @@ function Index() {
                 <Icon name="Trophy" className="text-white" size={28} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">VPHL</h1>
+                <h1 className="text-2xl font-bold text-white">VHL</h1>
                 <p className="text-xs text-cyan-400">Виртуальная Хоккейная Лига</p>
               </div>
             </div>
@@ -320,113 +318,61 @@ function Index() {
           </TabsList>
 
           <TabsContent value="standings" className="space-y-6">
-            {isAdmin && (
-              <Button onClick={() => openEditDialog('team')} className="bg-cyan-500 hover:bg-cyan-600">
-                <Icon name="Plus" size={16} className="mr-2" />
-                Добавить команду
-              </Button>
-            )}
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="bg-slate-800/50 border-cyan-500/20">
-                <CardHeader>
-                  <CardTitle className="text-cyan-400 flex items-center gap-2">
-                    <Icon name="Trophy" size={20} />
-                    Восточная конференция
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="border-cyan-500/20 hover:bg-transparent">
-                        <TableHead className="text-cyan-400">#</TableHead>
-                        <TableHead className="text-cyan-400">Команда</TableHead>
-                        <TableHead className="text-cyan-400 text-center">И</TableHead>
-                        <TableHead className="text-cyan-400 text-center">В</TableHead>
-                        <TableHead className="text-cyan-400 text-center">П</TableHead>
-                        <TableHead className="text-cyan-400 text-center">ПО</TableHead>
-                        <TableHead className="text-cyan-400 text-center">О</TableHead>
-                        {isAdmin && <TableHead className="text-cyan-400"></TableHead>}
+            <Card className="bg-slate-800/50 border-cyan-500/20">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                  <Icon name="Trophy" size={20} />
+                  Турнирная таблица
+                </CardTitle>
+                {isAdmin && (
+                  <Button onClick={() => openEditDialog('team')} className="bg-cyan-500 hover:bg-cyan-600">
+                    <Icon name="Plus" size={16} className="mr-2" />
+                    Добавить команду
+                  </Button>
+                )}
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-cyan-500/20 hover:bg-transparent">
+                      <TableHead className="text-cyan-400">#</TableHead>
+                      <TableHead className="text-cyan-400">Команда</TableHead>
+                      <TableHead className="text-cyan-400 text-center">И</TableHead>
+                      <TableHead className="text-cyan-400 text-center">В</TableHead>
+                      <TableHead className="text-cyan-400 text-center">П</TableHead>
+                      <TableHead className="text-cyan-400 text-center">ПО</TableHead>
+                      <TableHead className="text-cyan-400 text-center">О</TableHead>
+                      {isAdmin && <TableHead className="text-cyan-400"></TableHead>}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedTeams.map((team, idx) => (
+                      <TableRow key={team.id} className="border-cyan-500/10 hover:bg-cyan-500/5">
+                        <TableCell className="text-white font-bold">{idx + 1}</TableCell>
+                        <TableCell className="text-white font-medium">{team.name}</TableCell>
+                        <TableCell className="text-center text-slate-300">{team.games_played}</TableCell>
+                        <TableCell className="text-center text-green-400">{team.wins}</TableCell>
+                        <TableCell className="text-center text-red-400">{team.losses}</TableCell>
+                        <TableCell className="text-center text-yellow-400">{team.overtime_losses}</TableCell>
+                        <TableCell className="text-center text-cyan-400 font-bold">{team.points}</TableCell>
+                        {isAdmin && (
+                          <TableCell>
+                            <div className="flex gap-1">
+                              <Button size="sm" variant="ghost" onClick={() => openEditDialog('team', team)}>
+                                <Icon name="Edit" size={14} />
+                              </Button>
+                              <Button size="sm" variant="ghost" onClick={() => handleDelete('team', team.id)}>
+                                <Icon name="Trash2" size={14} />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        )}
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {eastTeams.map((team, idx) => (
-                        <TableRow key={team.id} className="border-cyan-500/10 hover:bg-cyan-500/5">
-                          <TableCell className="text-white font-bold">{idx + 1}</TableCell>
-                          <TableCell className="text-white font-medium">{team.name}</TableCell>
-                          <TableCell className="text-center text-slate-300">{team.games_played}</TableCell>
-                          <TableCell className="text-center text-green-400">{team.wins}</TableCell>
-                          <TableCell className="text-center text-red-400">{team.losses}</TableCell>
-                          <TableCell className="text-center text-yellow-400">{team.overtime_losses}</TableCell>
-                          <TableCell className="text-center text-cyan-400 font-bold">{team.points}</TableCell>
-                          {isAdmin && (
-                            <TableCell>
-                              <div className="flex gap-1">
-                                <Button size="sm" variant="ghost" onClick={() => openEditDialog('team', team)}>
-                                  <Icon name="Edit" size={14} />
-                                </Button>
-                                <Button size="sm" variant="ghost" onClick={() => handleDelete('team', team.id)}>
-                                  <Icon name="Trash2" size={14} />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          )}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-slate-800/50 border-cyan-500/20">
-                <CardHeader>
-                  <CardTitle className="text-cyan-400 flex items-center gap-2">
-                    <Icon name="Trophy" size={20} />
-                    Западная конференция
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="border-cyan-500/20 hover:bg-transparent">
-                        <TableHead className="text-cyan-400">#</TableHead>
-                        <TableHead className="text-cyan-400">Команда</TableHead>
-                        <TableHead className="text-cyan-400 text-center">И</TableHead>
-                        <TableHead className="text-cyan-400 text-center">В</TableHead>
-                        <TableHead className="text-cyan-400 text-center">П</TableHead>
-                        <TableHead className="text-cyan-400 text-center">ПО</TableHead>
-                        <TableHead className="text-cyan-400 text-center">О</TableHead>
-                        {isAdmin && <TableHead className="text-cyan-400"></TableHead>}
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {westTeams.map((team, idx) => (
-                        <TableRow key={team.id} className="border-cyan-500/10 hover:bg-cyan-500/5">
-                          <TableCell className="text-white font-bold">{idx + 1}</TableCell>
-                          <TableCell className="text-white font-medium">{team.name}</TableCell>
-                          <TableCell className="text-center text-slate-300">{team.games_played}</TableCell>
-                          <TableCell className="text-center text-green-400">{team.wins}</TableCell>
-                          <TableCell className="text-center text-red-400">{team.losses}</TableCell>
-                          <TableCell className="text-center text-yellow-400">{team.overtime_losses}</TableCell>
-                          <TableCell className="text-center text-cyan-400 font-bold">{team.points}</TableCell>
-                          {isAdmin && (
-                            <TableCell>
-                              <div className="flex gap-1">
-                                <Button size="sm" variant="ghost" onClick={() => openEditDialog('team', team)}>
-                                  <Icon name="Edit" size={14} />
-                                </Button>
-                                <Button size="sm" variant="ghost" onClick={() => handleDelete('team', team.id)}>
-                                  <Icon name="Trash2" size={14} />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          )}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </div>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="schedule">
@@ -499,8 +445,7 @@ function Index() {
                       <div className="w-20 h-20 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <Icon name="Shield" size={32} className="text-cyan-400" />
                       </div>
-                      <h3 className="text-white font-bold mb-1">{team.name}</h3>
-                      <p className="text-sm text-slate-400">{team.conference}</p>
+                      <h3 className="text-white font-bold mb-2">{team.name}</h3>
                       <div className="mt-3 pt-3 border-t border-cyan-500/20">
                         <p className="text-cyan-400 font-bold text-lg">{team.points} очков</p>
                       </div>
@@ -716,18 +661,7 @@ function Index() {
                     className="bg-slate-900 border-cyan-500/20 text-white"
                   />
                 </div>
-                <div>
-                  <Label className="text-white">Конференция</Label>
-                  <Select value={editDialog.item.conference} onValueChange={(val) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, conference: val } }))}>
-                    <SelectTrigger className="bg-slate-900 border-cyan-500/20 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Восточная">Восточная</SelectItem>
-                      <SelectItem value="Западная">Западная</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-white">Игры</Label>
