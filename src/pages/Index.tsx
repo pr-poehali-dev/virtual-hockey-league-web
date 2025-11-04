@@ -82,12 +82,47 @@ function Index() {
   const [editDialog, setEditDialog] = useState<{ open: boolean; type: string; item: any }>({ open: false, type: '', item: null });
 
   useEffect(() => {
-    fetchTeams();
-    fetchMatches();
-    fetchPlayers();
-    fetchNews();
-    fetchRegulations();
+    const savedTeams = localStorage.getItem('vhl_teams');
+    const savedMatches = localStorage.getItem('vhl_matches');
+    const savedPlayers = localStorage.getItem('vhl_players');
+    const savedNews = localStorage.getItem('vhl_news');
+    const savedRegulations = localStorage.getItem('vhl_regulations');
+
+    if (savedTeams) setTeams(JSON.parse(savedTeams));
+    else fetchTeams();
+    
+    if (savedMatches) setMatches(JSON.parse(savedMatches));
+    else fetchMatches();
+    
+    if (savedPlayers) setPlayers(JSON.parse(savedPlayers));
+    else fetchPlayers();
+    
+    if (savedNews) setNews(JSON.parse(savedNews));
+    else fetchNews();
+    
+    if (savedRegulations) setRegulations(JSON.parse(savedRegulations));
+    else fetchRegulations();
   }, []);
+
+  useEffect(() => {
+    if (teams.length > 0) localStorage.setItem('vhl_teams', JSON.stringify(teams));
+  }, [teams]);
+
+  useEffect(() => {
+    if (matches.length > 0) localStorage.setItem('vhl_matches', JSON.stringify(matches));
+  }, [matches]);
+
+  useEffect(() => {
+    if (players.length > 0) localStorage.setItem('vhl_players', JSON.stringify(players));
+  }, [players]);
+
+  useEffect(() => {
+    if (news.length > 0) localStorage.setItem('vhl_news', JSON.stringify(news));
+  }, [news]);
+
+  useEffect(() => {
+    if (regulations.length > 0) localStorage.setItem('vhl_regulations', JSON.stringify(regulations));
+  }, [regulations]);
 
   const fetchTeams = async () => {
     const mockTeams: Team[] = [
@@ -258,27 +293,31 @@ function Index() {
   const sortedTeams = teams.sort((a, b) => b.points - a.points);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <header className="bg-slate-900/80 backdrop-blur-sm border-b border-cyan-500/20 sticky top-0 z-50">
+    <div className="min-h-screen bg-background">
+      <header className="bg-card backdrop-blur-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
-                <Icon name="Trophy" className="text-white" size={28} />
+              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                <Icon name="Trophy" className="text-primary-foreground" size={28} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">VHL</h1>
-                <p className="text-xs text-cyan-400">Виртуальная Хоккейная Лига</p>
+                <h1 className="text-2xl font-bold text-foreground">VHL</h1>
+                <p className="text-xs text-muted-foreground">Виртуальная Хоккейная Лига</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <a href="https://t.me/vhl1112" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
+                <Icon name="Send" size={16} />
+                Telegram канал
+              </a>
               {isAdmin ? (
-                <Button onClick={handleLogout} variant="outline" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
+                <Button onClick={handleLogout} variant="outline">
                   <Icon name="LogOut" size={16} className="mr-2" />
                   Выход
                 </Button>
               ) : (
-                <Button onClick={() => setShowLogin(true)} variant="outline" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
+                <Button onClick={() => setShowLogin(true)} variant="outline">
                   <Icon name="Lock" size={16} className="mr-2" />
                   Админ-панель
                 </Button>
@@ -290,42 +329,42 @@ function Index() {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="standings" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 bg-slate-800/50 border border-cyan-500/20">
-            <TabsTrigger value="standings" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white">
+          <TabsList className="grid w-full grid-cols-6 bg-card border border-border">
+            <TabsTrigger value="standings">
               <Icon name="Award" size={16} className="mr-2" />
               Таблица
             </TabsTrigger>
-            <TabsTrigger value="schedule" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white">
+            <TabsTrigger value="schedule">
               <Icon name="Calendar" size={16} className="mr-2" />
               Расписание
             </TabsTrigger>
-            <TabsTrigger value="teams" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white">
+            <TabsTrigger value="teams">
               <Icon name="Users" size={16} className="mr-2" />
               Команды
             </TabsTrigger>
-            <TabsTrigger value="players" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white">
+            <TabsTrigger value="players">
               <Icon name="User" size={16} className="mr-2" />
               Статистика
             </TabsTrigger>
-            <TabsTrigger value="regulations" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white">
+            <TabsTrigger value="regulations">
               <Icon name="FileText" size={16} className="mr-2" />
               Регламент
             </TabsTrigger>
-            <TabsTrigger value="news" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white">
+            <TabsTrigger value="news">
               <Icon name="Newspaper" size={16} className="mr-2" />
               Новости
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="standings" className="space-y-6">
-            <Card className="bg-slate-800/50 border-cyan-500/20">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="Trophy" size={20} />
                   Турнирная таблица
                 </CardTitle>
                 {isAdmin && (
-                  <Button onClick={() => openEditDialog('team')} className="bg-cyan-500 hover:bg-cyan-600">
+                  <Button onClick={() => openEditDialog('team')}>
                     <Icon name="Plus" size={16} className="mr-2" />
                     Добавить команду
                   </Button>
@@ -334,27 +373,36 @@ function Index() {
               <CardContent>
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-cyan-500/20 hover:bg-transparent">
-                      <TableHead className="text-cyan-400">#</TableHead>
-                      <TableHead className="text-cyan-400">Команда</TableHead>
-                      <TableHead className="text-cyan-400 text-center">И</TableHead>
-                      <TableHead className="text-cyan-400 text-center">В</TableHead>
-                      <TableHead className="text-cyan-400 text-center">П</TableHead>
-                      <TableHead className="text-cyan-400 text-center">ПО</TableHead>
-                      <TableHead className="text-cyan-400 text-center">О</TableHead>
-                      {isAdmin && <TableHead className="text-cyan-400"></TableHead>}
+                    <TableRow className="hover:bg-transparent">
+                      <TableHead>#</TableHead>
+                      <TableHead>Команда</TableHead>
+                      <TableHead className="text-center">И</TableHead>
+                      <TableHead className="text-center">В</TableHead>
+                      <TableHead className="text-center">П</TableHead>
+                      <TableHead className="text-center">ПО</TableHead>
+                      <TableHead className="text-center">О</TableHead>
+                      {isAdmin && <TableHead></TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {sortedTeams.map((team, idx) => (
-                      <TableRow key={team.id} className="border-cyan-500/10 hover:bg-cyan-500/5">
-                        <TableCell className="text-white font-bold">{idx + 1}</TableCell>
-                        <TableCell className="text-white font-medium">{team.name}</TableCell>
-                        <TableCell className="text-center text-slate-300">{team.games_played}</TableCell>
-                        <TableCell className="text-center text-green-400">{team.wins}</TableCell>
-                        <TableCell className="text-center text-red-400">{team.losses}</TableCell>
-                        <TableCell className="text-center text-yellow-400">{team.overtime_losses}</TableCell>
-                        <TableCell className="text-center text-cyan-400 font-bold">{team.points}</TableCell>
+                      <TableRow key={team.id}>
+                        <TableCell className="font-bold">{idx + 1}</TableCell>
+                        <TableCell className="font-medium">
+                          <div className="flex items-center gap-2">
+                            {team.logo_url ? (
+                              <img src={team.logo_url} alt={team.name} className="w-6 h-6 object-contain" />
+                            ) : (
+                              <Icon name="Shield" size={20} className="text-muted-foreground" />
+                            )}
+                            {team.name}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center text-muted-foreground">{team.games_played}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{team.wins}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{team.losses}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{team.overtime_losses}</TableCell>
+                        <TableCell className="text-center font-bold">{team.points}</TableCell>
                         {isAdmin && (
                           <TableCell>
                             <div className="flex gap-1">
@@ -376,14 +424,14 @@ function Index() {
           </TabsContent>
 
           <TabsContent value="schedule">
-            <Card className="bg-slate-800/50 border-cyan-500/20">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="Calendar" size={20} />
                   Расписание матчей
                 </CardTitle>
                 {isAdmin && (
-                  <Button onClick={() => openEditDialog('match')} className="bg-cyan-500 hover:bg-cyan-600">
+                  <Button onClick={() => openEditDialog('match')}>
                     <Icon name="Plus" size={16} className="mr-2" />
                     Добавить матч
                   </Button>
@@ -392,22 +440,22 @@ function Index() {
               <CardContent>
                 <div className="space-y-4">
                   {matches.map(match => (
-                    <div key={match.id} className="flex items-center justify-between p-4 bg-slate-900/50 rounded-lg border border-cyan-500/10 hover:border-cyan-500/30 transition-colors">
+                    <div key={match.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border transition-colors">
                       <div className="flex items-center gap-4 flex-1">
                         <div className="text-right flex-1">
-                          <p className="text-white font-semibold">{match.home_team_name}</p>
+                          <p className="font-semibold">{match.home_team_name}</p>
                         </div>
                         <div className="text-center">
-                          <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
+                          <Badge variant="outline">
                             {match.home_score} : {match.away_score}
                           </Badge>
                         </div>
                         <div className="text-left flex-1">
-                          <p className="text-white font-semibold">{match.away_team_name}</p>
+                          <p className="font-semibold">{match.away_team_name}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
-                        <div className="text-right text-sm text-slate-400">
+                        <div className="text-right text-sm text-muted-foreground">
                           {new Date(match.match_date).toLocaleDateString('ru-RU')}
                           <br />
                           {new Date(match.match_date).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
@@ -431,9 +479,9 @@ function Index() {
           </TabsContent>
 
           <TabsContent value="teams">
-            <Card className="bg-slate-800/50 border-cyan-500/20">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="Users" size={20} />
                   Команды лиги
                 </CardTitle>
@@ -441,13 +489,17 @@ function Index() {
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {teams.map(team => (
-                    <div key={team.id} className="p-6 bg-slate-900/50 rounded-lg border border-cyan-500/10 hover:border-cyan-500/30 transition-colors text-center">
-                      <div className="w-20 h-20 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Icon name="Shield" size={32} className="text-cyan-400" />
+                    <div key={team.id} className="p-6 bg-muted/50 rounded-lg border transition-colors text-center">
+                      <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+                        {team.logo_url ? (
+                          <img src={team.logo_url} alt={team.name} className="w-16 h-16 object-contain" />
+                        ) : (
+                          <Icon name="Shield" size={32} />
+                        )}
                       </div>
-                      <h3 className="text-white font-bold mb-2">{team.name}</h3>
-                      <div className="mt-3 pt-3 border-t border-cyan-500/20">
-                        <p className="text-cyan-400 font-bold text-lg">{team.points} очков</p>
+                      <h3 className="font-bold mb-2">{team.name}</h3>
+                      <div className="mt-3 pt-3 border-t">
+                        <p className="font-bold text-lg">{team.points} очков</p>
                       </div>
                     </div>
                   ))}
@@ -457,14 +509,14 @@ function Index() {
           </TabsContent>
 
           <TabsContent value="players">
-            <Card className="bg-slate-800/50 border-cyan-500/20">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="User" size={20} />
                   Статистика игроков
                 </CardTitle>
                 {isAdmin && (
-                  <Button onClick={() => openEditDialog('player')} className="bg-cyan-500 hover:bg-cyan-600">
+                  <Button onClick={() => openEditDialog('player')}>
                     <Icon name="Plus" size={16} className="mr-2" />
                     Добавить игрока
                   </Button>
@@ -473,29 +525,29 @@ function Index() {
               <CardContent>
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-cyan-500/20 hover:bg-transparent">
-                      <TableHead className="text-cyan-400">Игрок</TableHead>
-                      <TableHead className="text-cyan-400">Команда</TableHead>
-                      <TableHead className="text-cyan-400 text-center">№</TableHead>
-                      <TableHead className="text-cyan-400 text-center">Поз</TableHead>
-                      <TableHead className="text-cyan-400 text-center">И</TableHead>
-                      <TableHead className="text-cyan-400 text-center">Г</TableHead>
-                      <TableHead className="text-cyan-400 text-center">П</TableHead>
-                      <TableHead className="text-cyan-400 text-center">О</TableHead>
-                      {isAdmin && <TableHead className="text-cyan-400"></TableHead>}
+                    <TableRow className="hover:bg-transparent">
+                      <TableHead>Игрок</TableHead>
+                      <TableHead>Команда</TableHead>
+                      <TableHead className="text-center">№</TableHead>
+                      <TableHead className="text-center">Поз</TableHead>
+                      <TableHead className="text-center">И</TableHead>
+                      <TableHead className="text-center">Г</TableHead>
+                      <TableHead className="text-center">П</TableHead>
+                      <TableHead className="text-center">О</TableHead>
+                      {isAdmin && <TableHead></TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {players.sort((a, b) => b.points - a.points).map(player => (
-                      <TableRow key={player.id} className="border-cyan-500/10 hover:bg-cyan-500/5">
-                        <TableCell className="text-white font-medium">{player.name}</TableCell>
-                        <TableCell className="text-slate-300">{player.team_name}</TableCell>
-                        <TableCell className="text-center text-slate-300">{player.number}</TableCell>
-                        <TableCell className="text-center text-slate-300">{player.position}</TableCell>
-                        <TableCell className="text-center text-slate-300">{player.games_played}</TableCell>
-                        <TableCell className="text-center text-green-400">{player.goals}</TableCell>
-                        <TableCell className="text-center text-blue-400">{player.assists}</TableCell>
-                        <TableCell className="text-center text-cyan-400 font-bold">{player.points}</TableCell>
+                      <TableRow key={player.id}>
+                        <TableCell className="font-medium">{player.name}</TableCell>
+                        <TableCell className="text-muted-foreground">{player.team_name}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{player.number}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{player.position}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{player.games_played}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{player.goals}</TableCell>
+                        <TableCell className="text-center text-muted-foreground">{player.assists}</TableCell>
+                        <TableCell className="text-center font-bold">{player.points}</TableCell>
                         {isAdmin && (
                           <TableCell>
                             <div className="flex gap-1">
@@ -517,14 +569,14 @@ function Index() {
           </TabsContent>
 
           <TabsContent value="regulations">
-            <Card className="bg-slate-800/50 border-cyan-500/20">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="FileText" size={20} />
                   Регламент лиги
                 </CardTitle>
                 {isAdmin && (
-                  <Button onClick={() => openEditDialog('regulation')} className="bg-cyan-500 hover:bg-cyan-600">
+                  <Button onClick={() => openEditDialog('regulation')}>
                     <Icon name="Plus" size={16} className="mr-2" />
                     Добавить раздел
                   </Button>
@@ -533,7 +585,7 @@ function Index() {
               <CardContent>
                 <div className="space-y-6">
                   {regulations.sort((a, b) => a.section_order - b.section_order).map(reg => (
-                    <div key={reg.id} className="p-6 bg-slate-900/50 rounded-lg border border-cyan-500/10 relative">
+                    <div key={reg.id} className="p-6 bg-muted/50 rounded-lg border relative">
                       {isAdmin && (
                         <div className="absolute top-4 right-4 flex gap-1">
                           <Button size="sm" variant="ghost" onClick={() => openEditDialog('regulation', reg)}>
@@ -544,8 +596,8 @@ function Index() {
                           </Button>
                         </div>
                       )}
-                      <h3 className="text-xl font-bold text-cyan-400 mb-3">{reg.title}</h3>
-                      <p className="text-slate-300 leading-relaxed">{reg.content}</p>
+                      <h3 className="text-xl font-bold mb-3">{reg.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed">{reg.content}</p>
                     </div>
                   ))}
                 </div>
@@ -554,14 +606,14 @@ function Index() {
           </TabsContent>
 
           <TabsContent value="news">
-            <Card className="bg-slate-800/50 border-cyan-500/20">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="Newspaper" size={20} />
                   Новости лиги
                 </CardTitle>
                 {isAdmin && (
-                  <Button onClick={() => openEditDialog('news')} className="bg-cyan-500 hover:bg-cyan-600">
+                  <Button onClick={() => openEditDialog('news')}>
                     <Icon name="Plus" size={16} className="mr-2" />
                     Добавить новость
                   </Button>
@@ -570,7 +622,7 @@ function Index() {
               <CardContent>
                 <div className="space-y-6">
                   {news.map(item => (
-                    <div key={item.id} className="p-6 bg-slate-900/50 rounded-lg border border-cyan-500/10 hover:border-cyan-500/30 transition-colors relative">
+                    <div key={item.id} className="p-6 bg-muted/50 rounded-lg border transition-colors relative">
                       {isAdmin && (
                         <div className="absolute top-4 right-4 flex gap-1">
                           <Button size="sm" variant="ghost" onClick={() => openEditDialog('news', item)}>
@@ -584,13 +636,13 @@ function Index() {
                       {item.image_url && (
                         <img src={item.image_url} alt={item.title} className="w-full h-48 object-cover rounded-lg mb-4" />
                       )}
-                      <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-                      <div className="flex items-center gap-4 text-sm text-slate-400 mb-3">
+                      <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
                         <span>{new Date(item.published_at).toLocaleDateString('ru-RU')}</span>
                         <span>•</span>
                         <span>{item.author}</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed">{item.content}</p>
+                      <p className="text-muted-foreground leading-relaxed">{item.content}</p>
                     </div>
                   ))}
                 </div>
@@ -601,38 +653,36 @@ function Index() {
       </main>
 
       <Dialog open={showLogin} onOpenChange={setShowLogin}>
-        <DialogContent className="bg-slate-800 border-cyan-500/20">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-cyan-400 flex items-center gap-2">
+            <DialogTitle className="flex items-center gap-2">
               <Icon name="Lock" size={20} />
               Вход в админ-панель
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-4">
             <div>
-              <label className="text-white text-sm mb-2 block">Логин</label>
+              <label className="text-sm mb-2 block">Логин</label>
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
-                className="bg-slate-900 border-cyan-500/20 text-white"
               />
             </div>
             <div>
-              <label className="text-white text-sm mb-2 block">Пароль</label>
+              <label className="text-sm mb-2 block">Пароль</label>
               <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••"
-                className="bg-slate-900 border-cyan-500/20 text-white"
                 onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
               />
             </div>
-            <Button onClick={handleLogin} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white">
+            <Button onClick={handleLogin} className="w-full">
               Войти
             </Button>
-            <p className="text-sm text-slate-400 text-center">
+            <p className="text-sm text-muted-foreground text-center">
               Логин: admin / Пароль: admin123
             </p>
           </div>
@@ -640,9 +690,9 @@ function Index() {
       </Dialog>
 
       <Dialog open={editDialog.open} onOpenChange={closeEditDialog}>
-        <DialogContent className="bg-slate-800 border-cyan-500/20 max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-cyan-400">
+            <DialogTitle>
               {editDialog.type === 'team' && 'Редактирование команды'}
               {editDialog.type === 'match' && 'Редактирование матча'}
               {editDialog.type === 'player' && 'Редактирование игрока'}
@@ -654,42 +704,64 @@ function Index() {
             {editDialog.type === 'team' && editDialog.item && (
               <>
                 <div>
-                  <Label className="text-white">Название команды</Label>
+                  <Label>Название команды</Label>
                   <Input
                     value={editDialog.item.name}
                     onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, name: e.target.value } }))}
-                    className="bg-slate-900 border-cyan-500/20 text-white"
                   />
+                </div>
+
+                <div>
+                  <Label>Логотип команды</Label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setEditDialog(prev => ({ ...prev, item: { ...prev.item, logo_url: reader.result as string } }));
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  {editDialog.item.logo_url && (
+                    <div className="mt-2">
+                      <img src={editDialog.item.logo_url} alt="Logo preview" className="w-20 h-20 object-contain border rounded" />
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-white">Игры</Label>
-                    <Input type="number" value={editDialog.item.games_played} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, games_played: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Игры</Label>
+                    <Input type="number" value={editDialog.item.games_played} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, games_played: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Победы</Label>
-                    <Input type="number" value={editDialog.item.wins} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, wins: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Победы</Label>
+                    <Input type="number" value={editDialog.item.wins} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, wins: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Поражения</Label>
-                    <Input type="number" value={editDialog.item.losses} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, losses: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Поражения</Label>
+                    <Input type="number" value={editDialog.item.losses} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, losses: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Поражения ОТ</Label>
-                    <Input type="number" value={editDialog.item.overtime_losses} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, overtime_losses: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Поражения ОТ</Label>
+                    <Input type="number" value={editDialog.item.overtime_losses} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, overtime_losses: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Голы забитые</Label>
-                    <Input type="number" value={editDialog.item.goals_for} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, goals_for: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Голы забитые</Label>
+                    <Input type="number" value={editDialog.item.goals_for} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, goals_for: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Голы пропущенные</Label>
-                    <Input type="number" value={editDialog.item.goals_against} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, goals_against: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Голы пропущенные</Label>
+                    <Input type="number" value={editDialog.item.goals_against} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, goals_against: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Очки</Label>
-                    <Input type="number" value={editDialog.item.points} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, points: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Очки</Label>
+                    <Input type="number" value={editDialog.item.points} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, points: +e.target.value } }))} />
                   </div>
                 </div>
               </>
@@ -698,9 +770,9 @@ function Index() {
             {editDialog.type === 'match' && editDialog.item && (
               <>
                 <div>
-                  <Label className="text-white">Хозяева</Label>
+                  <Label>Хозяева</Label>
                   <Select value={editDialog.item.home_team_id?.toString()} onValueChange={(val) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, home_team_id: +val } }))}>
-                    <SelectTrigger className="bg-slate-900 border-cyan-500/20 text-white">
+                    <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -709,9 +781,9 @@ function Index() {
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-white">Гости</Label>
+                  <Label>Гости</Label>
                   <Select value={editDialog.item.away_team_id?.toString()} onValueChange={(val) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, away_team_id: +val } }))}>
-                    <SelectTrigger className="bg-slate-900 border-cyan-500/20 text-white">
+                    <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -720,23 +792,23 @@ function Index() {
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-white">Дата и время</Label>
-                  <Input type="datetime-local" value={editDialog.item.match_date?.slice(0, 16)} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, match_date: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>Дата и время</Label>
+                  <Input type="datetime-local" value={editDialog.item.match_date?.slice(0, 16)} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, match_date: e.target.value } }))} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-white">Счёт хозяев</Label>
-                    <Input type="number" value={editDialog.item.home_score} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, home_score: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Счёт хозяев</Label>
+                    <Input type="number" value={editDialog.item.home_score} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, home_score: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Счёт гостей</Label>
-                    <Input type="number" value={editDialog.item.away_score} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, away_score: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Счёт гостей</Label>
+                    <Input type="number" value={editDialog.item.away_score} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, away_score: +e.target.value } }))} />
                   </div>
                 </div>
                 <div>
-                  <Label className="text-white">Статус</Label>
+                  <Label>Статус</Label>
                   <Select value={editDialog.item.status} onValueChange={(val) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, status: val } }))}>
-                    <SelectTrigger className="bg-slate-900 border-cyan-500/20 text-white">
+                    <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -752,13 +824,13 @@ function Index() {
             {editDialog.type === 'player' && editDialog.item && (
               <>
                 <div>
-                  <Label className="text-white">Имя игрока</Label>
-                  <Input value={editDialog.item.name} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, name: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>Имя игрока</Label>
+                  <Input value={editDialog.item.name} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, name: e.target.value } }))} />
                 </div>
                 <div>
-                  <Label className="text-white">Команда</Label>
+                  <Label>Команда</Label>
                   <Select value={editDialog.item.team_id?.toString()} onValueChange={(val) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, team_id: +val } }))}>
-                    <SelectTrigger className="bg-slate-900 border-cyan-500/20 text-white">
+                    <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -768,13 +840,13 @@ function Index() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-white">Номер</Label>
-                    <Input type="number" value={editDialog.item.number} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, number: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Номер</Label>
+                    <Input type="number" value={editDialog.item.number} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, number: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Позиция</Label>
+                    <Label>Позиция</Label>
                     <Select value={editDialog.item.position} onValueChange={(val) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, position: val } }))}>
-                      <SelectTrigger className="bg-slate-900 border-cyan-500/20 text-white">
+                      <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -785,20 +857,20 @@ function Index() {
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-white">Игры</Label>
-                    <Input type="number" value={editDialog.item.games_played} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, games_played: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Игры</Label>
+                    <Input type="number" value={editDialog.item.games_played} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, games_played: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Голы</Label>
-                    <Input type="number" value={editDialog.item.goals} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, goals: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Голы</Label>
+                    <Input type="number" value={editDialog.item.goals} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, goals: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Передачи</Label>
-                    <Input type="number" value={editDialog.item.assists} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, assists: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Передачи</Label>
+                    <Input type="number" value={editDialog.item.assists} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, assists: +e.target.value } }))} />
                   </div>
                   <div>
-                    <Label className="text-white">Штрафные минуты</Label>
-                    <Input type="number" value={editDialog.item.penalty_minutes} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, penalty_minutes: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                    <Label>Штрафные минуты</Label>
+                    <Input type="number" value={editDialog.item.penalty_minutes} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, penalty_minutes: +e.target.value } }))} />
                   </div>
                 </div>
               </>
@@ -807,20 +879,20 @@ function Index() {
             {editDialog.type === 'news' && editDialog.item && (
               <>
                 <div>
-                  <Label className="text-white">Заголовок</Label>
-                  <Input value={editDialog.item.title} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, title: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>Заголовок</Label>
+                  <Input value={editDialog.item.title} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, title: e.target.value } }))} />
                 </div>
                 <div>
-                  <Label className="text-white">Содержание</Label>
-                  <Textarea value={editDialog.item.content} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, content: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white min-h-32" />
+                  <Label>Содержание</Label>
+                  <Textarea value={editDialog.item.content} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, content: e.target.value } }))} className="min-h-32" />
                 </div>
                 <div>
-                  <Label className="text-white">URL изображения</Label>
-                  <Input value={editDialog.item.image_url || ''} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, image_url: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>URL изображения</Label>
+                  <Input value={editDialog.item.image_url || ''} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, image_url: e.target.value } }))} />
                 </div>
                 <div>
-                  <Label className="text-white">Автор</Label>
-                  <Input value={editDialog.item.author} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, author: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>Автор</Label>
+                  <Input value={editDialog.item.author} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, author: e.target.value } }))} />
                 </div>
               </>
             )}
@@ -828,30 +900,30 @@ function Index() {
             {editDialog.type === 'regulation' && editDialog.item && (
               <>
                 <div>
-                  <Label className="text-white">Заголовок</Label>
-                  <Input value={editDialog.item.title} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, title: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>Заголовок</Label>
+                  <Input value={editDialog.item.title} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, title: e.target.value } }))} />
                 </div>
                 <div>
-                  <Label className="text-white">Содержание</Label>
-                  <Textarea value={editDialog.item.content} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, content: e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white min-h-32" />
+                  <Label>Содержание</Label>
+                  <Textarea value={editDialog.item.content} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, content: e.target.value } }))} className="min-h-32" />
                 </div>
                 <div>
-                  <Label className="text-white">Порядок отображения</Label>
-                  <Input type="number" value={editDialog.item.section_order} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, section_order: +e.target.value } }))} className="bg-slate-900 border-cyan-500/20 text-white" />
+                  <Label>Порядок отображения</Label>
+                  <Input type="number" value={editDialog.item.section_order} onChange={(e) => setEditDialog(prev => ({ ...prev, item: { ...prev.item, section_order: +e.target.value } }))} />
                 </div>
               </>
             )}
 
-            <Button onClick={handleSave} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white">
+            <Button onClick={handleSave} className="w-full">
               Сохранить
             </Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      <footer className="bg-slate-900 border-t border-cyan-500/20 mt-16 py-8">
+      <footer className="bg-muted border-t mt-16 py-8">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-slate-400">
+          <p className="text-muted-foreground">
             © 2025 Виртуальная Хоккейная Лига. Все права защищены.
           </p>
         </div>
