@@ -74,8 +74,10 @@ function Index() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [news, setNews] = useState<News[]>([]);
   const [regulations, setRegulations] = useState<Regulation[]>([]);
+  const [leagueLogo, setLeagueLogo] = useState<string>('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showLogoDialog, setShowLogoDialog] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   
@@ -87,6 +89,7 @@ function Index() {
     const savedPlayers = localStorage.getItem('vhl_players');
     const savedNews = localStorage.getItem('vhl_news');
     const savedRegulations = localStorage.getItem('vhl_regulations');
+    const savedLeagueLogo = localStorage.getItem('vhl_league_logo');
 
     if (savedTeams) setTeams(JSON.parse(savedTeams));
     else fetchTeams();
@@ -102,27 +105,33 @@ function Index() {
     
     if (savedRegulations) setRegulations(JSON.parse(savedRegulations));
     else fetchRegulations();
+
+    if (savedLeagueLogo) setLeagueLogo(savedLeagueLogo);
   }, []);
 
   useEffect(() => {
-    if (teams.length > 0) localStorage.setItem('vhl_teams', JSON.stringify(teams));
+    localStorage.setItem('vhl_teams', JSON.stringify(teams));
   }, [teams]);
 
   useEffect(() => {
-    if (matches.length > 0) localStorage.setItem('vhl_matches', JSON.stringify(matches));
+    localStorage.setItem('vhl_matches', JSON.stringify(matches));
   }, [matches]);
 
   useEffect(() => {
-    if (players.length > 0) localStorage.setItem('vhl_players', JSON.stringify(players));
+    localStorage.setItem('vhl_players', JSON.stringify(players));
   }, [players]);
 
   useEffect(() => {
-    if (news.length > 0) localStorage.setItem('vhl_news', JSON.stringify(news));
+    localStorage.setItem('vhl_news', JSON.stringify(news));
   }, [news]);
 
   useEffect(() => {
-    if (regulations.length > 0) localStorage.setItem('vhl_regulations', JSON.stringify(regulations));
+    localStorage.setItem('vhl_regulations', JSON.stringify(regulations));
   }, [regulations]);
+
+  useEffect(() => {
+    localStorage.setItem('vhl_league_logo', leagueLogo);
+  }, [leagueLogo]);
 
   const fetchTeams = async () => {
     const mockTeams: Team[] = [
@@ -298,8 +307,20 @@ function Index() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                <Icon name="Trophy" className="text-primary-foreground" size={28} />
+              <div 
+                className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity relative group"
+                onClick={() => isAdmin && setShowLogoDialog(true)}
+              >
+                {leagueLogo ? (
+                  <img src={leagueLogo} alt="League Logo" className="w-full h-full object-cover rounded-lg" />
+                ) : (
+                  <Icon name="Trophy" className="text-primary-foreground" size={28} />
+                )}
+                {isAdmin && (
+                  <div className="absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Icon name="Upload" className="text-white" size={20} />
+                  </div>
+                )}
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">VHL</h1>
@@ -928,6 +949,53 @@ function Index() {
           </p>
         </div>
       </footer>
+
+      <Dialog open={showLogoDialog} onOpenChange={setShowLogoDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Логотип лиги</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Загрузить логотип</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setLeagueLogo(reader.result as string);
+                      setShowLogoDialog(false);
+                      toast.success('Логотип лиги обновлён');
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </div>
+            {leagueLogo && (
+              <div className="flex flex-col items-center gap-2">
+                <Label>Текущий логотип</Label>
+                <img src={leagueLogo} alt="League Logo" className="w-20 h-20 object-cover rounded-lg border" />
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={() => {
+                    setLeagueLogo('');
+                    setShowLogoDialog(false);
+                    toast.success('Логотип лиги удалён');
+                  }}
+                >
+                  <Icon name="Trash2" size={14} className="mr-2" />
+                  Удалить логотип
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
